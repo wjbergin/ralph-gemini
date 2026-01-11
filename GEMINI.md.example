@@ -1,0 +1,54 @@
+# Project Context for Gemini CLI
+
+This file provides persistent context to Gemini CLI about your project.
+Customize this for your specific project.
+
+## Tech Stack
+- Language: (e.g., TypeScript, Python, Go)
+- Framework: (e.g., Next.js, Django, Gin)
+- Database: (e.g., PostgreSQL, MongoDB)
+- ORM: (e.g., Prisma, SQLAlchemy)
+
+## Project Structure
+```
+src/
+├── api/          # API routes/handlers
+├── components/   # UI components
+├── lib/          # Shared utilities
+├── models/       # Data models
+└── tests/        # Test files
+```
+
+## Key Commands
+```bash
+# Development
+npm run dev          # Start dev server
+
+# Testing
+npm test             # Run all tests
+npm run test:watch   # Watch mode
+
+# Code Quality
+npm run lint         # Run linter
+npm run typecheck    # Type checking
+
+# Database
+npm run db:migrate   # Run migrations
+npm run db:seed      # Seed database
+```
+
+## Conventions
+- File naming: kebab-case for files, PascalCase for components
+- API routes: RESTful, versioned under /api/v1/
+- Tests: Co-located with source files as *.test.ts
+- Commits: Conventional commits (feat:, fix:, docs:, etc.)
+
+## Important Patterns
+- All API endpoints should validate input with Zod schemas
+- Database queries should use transactions for multi-step operations
+- Components should use the existing design system in /components/ui/
+
+## Environment
+- Node.js 22
+- npm (not yarn or pnpm)
+- PostgreSQL 16

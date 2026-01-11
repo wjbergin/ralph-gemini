@@ -4,6 +4,29 @@ An autonomous AI agent loop that runs Gemini CLI repeatedly until all PRD items 
 
 Based on [Geoffrey Huntley's Ralph pattern](https://ghuntley.com/ralph/).
 
+## Sandboxing
+
+By default, the loop runs in a **sandboxed container** (Docker or Podman) for security. This isolates file system access and shell commands.
+
+| Mode | Flag | Security | Requires |
+|------|------|----------|----------|
+| Sandbox (default) | `--sandbox` or `-s` | ✅ High | Docker or Podman |
+| No sandbox | `--no-sandbox` | ⚠️ Low | Nothing extra |
+| macOS Seatbelt | (auto on macOS) | ✅ Medium | macOS only |
+
+```bash
+# Default: sandbox enabled
+./loop.sh
+
+# Explicit sandbox
+./loop.sh --sandbox
+
+# Skip sandbox (use with caution)
+./loop.sh --no-sandbox
+```
+
+**First run with sandbox:** Gemini CLI will pull/build the sandbox image (~1-2 min). Subsequent runs are fast.
+
 ## How It Works
 
 ```
@@ -48,12 +71,25 @@ Based on [Geoffrey Huntley's Ralph pattern](https://ghuntley.com/ralph/).
 
 1. Copy files to your project:
    ```bash
-   cp loop.sh prompt.md prd.json.example /path/to/your/project/
+   cp loop.sh setup.sh generate-prd.sh prompt.md /path/to/your/project/
    cd /path/to/your/project
-   chmod +x loop.sh
+   chmod +x *.sh
    ```
 
-2. Create your PRD:
+2. Generate your PRD (choose one method):
+
+   **Option A: Interactive interview**
+   ```bash
+   ./setup.sh
+   # Gemini will ask you questions about your project
+   ```
+
+   **Option B: One-shot from description**
+   ```bash
+   ./generate-prd.sh "Build a REST API for managing todos with user auth"
+   ```
+
+   **Option C: Manual**
    ```bash
    cp prd.json.example prd.json
    # Edit prd.json with your stories
@@ -69,6 +105,8 @@ Based on [Geoffrey Huntley's Ralph pattern](https://ghuntley.com/ralph/).
 | File | Purpose |
 |------|---------|
 | `loop.sh` | Main script - orchestrates the agent loop |
+| `setup.sh` | Interactive PRD generator - Gemini interviews you |
+| `generate-prd.sh` | One-shot PRD generator from a description |
 | `prompt.md` | Instructions sent to Gemini each iteration |
 | `prd.json` | Your user stories (auto-updated as stories complete) |
 | `progress.txt` | Persistent memory between iterations (auto-created) |
@@ -110,11 +148,22 @@ The agent signals completion by outputting specific markers:
 ## Options
 
 ```bash
-# Run with default 10 iterations
+# Run with default settings (sandbox + 10 iterations)
 ./loop.sh
 
 # Run with custom max iterations
 ./loop.sh 20
+
+# Explicitly enable sandbox
+./loop.sh --sandbox
+./loop.sh -s
+
+# Disable sandbox (less secure, but works without Docker)
+./loop.sh --no-sandbox
+
+# Combine options
+./loop.sh --sandbox 20
+./loop.sh --no-sandbox 5
 ```
 
 ## Gemini CLI vs Claude Code
@@ -125,9 +174,11 @@ This is a port of the [Claude Code version](https://github.com/...) to Gemini CL
 |---------|-------------|------------|
 | Headless flag | `-p "prompt"` | `-p "prompt"` or `-p -` (stdin) |
 | Auto-approve | `--dangerously-skip-permissions` | `--yolo` |
+| Sandbox | `--sandbox` | `-s` or `--sandbox` |
 | JSON output | `--output-format json` | `--output-format json` |
 | Context file | `CLAUDE.md` | `GEMINI.md` |
 | Free tier | API key required | 60 req/min, 1000 req/day |
+| Sandbox backend | Docker | Docker, Podman, or macOS Seatbelt |
 
 ## Context Files
 

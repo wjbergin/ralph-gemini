@@ -1,0 +1,59 @@
+{
+  "projectName": "Example Feature",
+  "branchName": "feature/example-feature",
+  "description": "Brief description of what this feature does",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Add database migration for new column",
+      "priority": 1,
+      "passes": false,
+      "acceptanceCriteria": [
+        "Migration file exists",
+        "Column is added to the correct table",
+        "Migration runs without errors",
+        "Rollback works correctly"
+      ],
+      "technicalNotes": "Use the existing migration pattern in db/migrations/"
+    },
+    {
+      "id": "US-002",
+      "title": "Create API endpoint for new resource",
+      "priority": 2,
+      "passes": false,
+      "acceptanceCriteria": [
+        "GET /api/resource returns list",
+        "POST /api/resource creates new item",
+        "Proper error handling for invalid input",
+        "Returns appropriate HTTP status codes"
+      ],
+      "technicalNotes": "Follow RESTful conventions used in existing endpoints"
+    },
+    {
+      "id": "US-003",
+      "title": "Add UI component for displaying data",
+      "priority": 3,
+      "passes": false,
+      "acceptanceCriteria": [
+        "Component renders list of items",
+        "Loading state shown while fetching",
+        "Error state shown on API failure",
+        "Empty state when no items exist"
+      ],
+      "technicalNotes": "Use existing component library patterns"
+    },
+    {
+      "id": "US-004",
+      "title": "Write tests for new functionality",
+      "priority": 4,
+      "passes": false,
+      "acceptanceCriteria": [
+        "Unit tests for API endpoint",
+        "Unit tests for UI component",
+        "All tests pass",
+        "Coverage meets project minimum"
+      ],
+      "technicalNotes": "Follow existing test patterns"
+    }
+  ]
+}
