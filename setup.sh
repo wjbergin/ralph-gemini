@@ -102,7 +102,7 @@ echo ""
 
 # Run Gemini interactively
 cd "$SCRIPT_DIR"
-gemini
+gemini -i @"$GEMINI_MD"
 
 # Restore original GEMINI.md
 if [ -n "$BACKUP_MD" ] && [ -f "$BACKUP_MD" ]; then
