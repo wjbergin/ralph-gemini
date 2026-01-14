@@ -138,6 +138,35 @@ setup_branch() {
   fi
 }
 
+# Ensure ralph files are gitignored
+setup_gitignore() {
+  local GITIGNORE="$SCRIPT_DIR/.gitignore"
+  local RALPH_IGNORE="# Ralph autonomous agent files
+loop.sh
+setup.sh
+generate-prd.sh
+prompt.md
+prd.json
+prd.json.example
+progress.txt
+archive/
+.last-branch
+GEMINI.md.example
+"
+
+  # Check if .gitignore exists and has ralph section
+  if [ -f "$GITIGNORE" ]; then
+    if ! grep -q "# Ralph autonomous agent files" "$GITIGNORE"; then
+      log_info "Adding ralph files to .gitignore"
+      echo "" >>"$GITIGNORE"
+      echo "$RALPH_IGNORE" >>"$GITIGNORE"
+    fi
+  else
+    log_info "Creating .gitignore for ralph files"
+    echo "$RALPH_IGNORE" >"$GITIGNORE"
+  fi
+}
+
 # Get next incomplete story
 get_next_story() {
   jq -r '.userStories | map(select(.passes != true)) | .[0] // "null"' "$PRD_FILE"
@@ -316,6 +345,7 @@ main() {
   check_prerequisites
   archive_previous_run
   save_current_branch
+  setup_gitignore
   setup_branch
 
   # Initialize progress file if it doesn't exist
